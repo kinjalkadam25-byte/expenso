@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -204,25 +205,25 @@
     }
     .sidebar-label {
       font-size: 0.6rem; font-weight: 700;
-      color: rgba(148,163,184,0.5);
+      color: rgba(148,163,184,0.6);
       text-transform: uppercase; letter-spacing: 2px;
-      padding: 0 8px; margin-bottom: 4px;
+      padding: 0 8px; margin-bottom: 6px;
     }
     .sidebar-nav { list-style: none; }
     .sidebar-nav li a {
       display: flex; align-items: center; gap: 10px;
       padding: 9px 10px; border-radius: 8px;
-      color: var(--sidebar-text); font-size: 0.85rem;
+      color: #94a3b8; font-size: 0.85rem;
       font-weight: 500; text-decoration: none;
       transition: background 0.15s, color 0.15s;
       cursor: pointer;
     }
-    .sidebar-nav li a:hover { background: rgba(255,255,255,0.06); color: #fff; }
+    .sidebar-nav li a:hover { background: rgba(255,255,255,0.08); color: #ffffff; }
     .sidebar-nav li a.active {
-      background: rgba(37,99,235,0.2);
-      color: #fff; font-weight: 600;
+      background: rgba(37,99,235,0.25);
+      color: #ffffff; font-weight: 600;
     }
-    .sidebar-nav li a .nav-icon { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; }
+    .sidebar-nav li a .nav-icon { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; display:flex; align-items:center; justify-content:center; } .sidebar-nav li a .nav-icon svg { stroke: currentColor; }
     .sidebar-nav li a .nav-badge {
       margin-left: auto; background: var(--accent);
       color: #fff; font-size: 0.6rem; font-weight: 700;
