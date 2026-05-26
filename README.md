@@ -212,18 +212,18 @@
     .sidebar-nav { list-style: none; }
     .sidebar-nav li a {
       display: flex; align-items: center; gap: 10px;
-      padding: 9px 10px; border-radius: 8px;
-      color: #94a3b8; font-size: 0.85rem;
-      font-weight: 500; text-decoration: none;
+      padding: 10px 12px; border-radius: 8px;
+      color: #cbd5e1 !important; font-size: 0.85rem;
+      font-weight: 500; text-decoration: none !important;
       transition: background 0.15s, color 0.15s;
       cursor: pointer;
     }
-    .sidebar-nav li a:hover { background: rgba(255,255,255,0.08); color: #ffffff; }
+    .sidebar-nav li a:hover { background: rgba(255,255,255,0.08); color: #ffffff !important; }
     .sidebar-nav li a.active {
-      background: rgba(37,99,235,0.25);
-      color: #ffffff; font-weight: 600;
+      background: rgba(37,99,235,0.3);
+      color: #ffffff !important; font-weight: 600;
     }
-    .sidebar-nav li a .nav-icon { font-size: 1rem; width: 20px; text-align: center; flex-shrink: 0; display:flex; align-items:center; justify-content:center; } .sidebar-nav li a .nav-icon svg { stroke: currentColor; }
+    
     .sidebar-nav li a .nav-badge {
       margin-left: auto; background: var(--accent);
       color: #fff; font-size: 0.6rem; font-weight: 700;
@@ -649,18 +649,18 @@
     <div class="sidebar-section">
       <div class="sidebar-label">Main</div>
       <ul class="sidebar-nav">
-        <li><a class="active"><span class="nav-icon"></span> Overview</a></li>
-        <li><a><span class="nav-icon"></span> Transactions</a></li>
-        <li><a><span class="nav-icon"></span> Categories</a></li>
-        <li><a><span class="nav-icon"></span> Import</a></li>
+        <li><a class="active">Overview</a></li>
+        <li><a>Transactions</a></li>
+        <li><a>Categories</a></li>
+        <li><a>Import</a></li>
       </ul>
     </div>
 
     <div class="sidebar-section">
       <div class="sidebar-label">Reports</div>
       <ul class="sidebar-nav">
-        <li><a><span class="nav-icon"></span> Monthly Report</a></li>
-        <li><a><span class="nav-icon"></span> Annual Summary</a></li>
+        <li><a>Monthly Report</a></li>
+        <li><a>Annual Summary</a></li>
       </ul>
     </div>
 
@@ -705,29 +705,68 @@
 
         <!-- Left column -->
         <div>
-          <!-- Add Expense -->
+          <!-- Add Transaction -->
           <div class="card section-gap">
             <div class="card-header">
-              <span class="card-title">Add Expense</span>
-              <span class="card-badge">Quick Entry</span>
+              <span class="card-title">Add Transaction</span>
+              <span class="card-badge">Manual Entry</span>
             </div>
+
+            <!-- Type toggle -->
             <div class="form-group">
-              <label>Date</label>
+              <label>Transaction Type</label>
+              <div class="type-toggle">
+                <button class="type-btn active" id="typeDebit" onclick="setType('debit')">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+                  Debit
+                </button>
+                <button class="type-btn" id="typeCredit" onclick="setType('credit')">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+                  Credit
+                </button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Transaction Date</label>
               <input type="date" id="expDate" />
             </div>
+
+            <div class="form-group">
+              <label>Bank / Account</label>
+              <select id="expBank">
+                <option value="">Select bank</option>
+                <option>SBI</option>
+                <option>HDFC Bank</option>
+                <option>ICICI Bank</option>
+                <option>Axis Bank</option>
+                <option>Kotak Bank</option>
+                <option>Bank of India</option>
+                <option>Canara Bank</option>
+                <option>PNB</option>
+                <option>Union Bank</option>
+                <option>Cash</option>
+                <option>UPI / Wallet</option>
+                <option>Other</option>
+              </select>
+            </div>
+
             <div class="form-group">
               <label>Category</label>
               <select id="expCat"></select>
             </div>
+
             <div class="form-group">
               <label>Amount (₹)</label>
               <input type="number" id="expAmt" placeholder="0.00" min="0" step="0.01" />
             </div>
+
             <div class="form-group">
               <label>Note <span style="color:var(--muted);font-weight:400">(optional)</span></label>
-              <input type="text" id="expNote" placeholder="e.g. Paid via UPI" />
+              <input type="text" id="expNote" placeholder="e.g. Monthly salary, Grocery run" />
             </div>
-            <button class="btn" onclick="addExpense()">+ Add Expense</button>
+
+            <button class="btn" id="addTxBtn" onclick="addExpense()">+ Add Transaction</button>
           </div>
 
           <!-- Import -->
@@ -758,10 +797,15 @@
           <div class="tx-header">
             <span class="card-title">Transactions</span>
             <div class="filter-row">
+              <select id="filterType" onchange="renderTransactions()">
+                <option value="">All Types</option>
+                <option value="debit">Debit</option>
+                <option value="credit">Credit</option>
+              </select>
               <select id="filterCat" onchange="renderTransactions()">
                 <option value="">All Categories</option>
               </select>
-              <input type="text" id="filterSearch" placeholder="Search..." oninput="renderTransactions()" style="width:130px" />
+              <input type="text" id="filterSearch" placeholder="Search..." oninput="renderTransactions()" style="width:110px" />
             </div>
           </div>
           <div id="txTable"></div>
@@ -1069,28 +1113,53 @@ function monthName(y, m) {
   return new Date(y, m, 1).toLocaleString('default', { month: 'long', year: 'numeric' });
 }
 
+// Track selected transaction type
+let _txType = 'debit';
+
+function setType(type) {
+  _txType = type;
+  const dBtn = document.getElementById('typeDebit');
+  const cBtn = document.getElementById('typeCredit');
+  dBtn.classList.toggle('active', type === 'debit');
+  dBtn.classList.toggle('debit',  type === 'debit');
+  cBtn.classList.toggle('active', type === 'credit');
+  cBtn.classList.toggle('credit', type === 'credit');
+  // Update Add button colour
+  const addBtn = document.getElementById('addTxBtn');
+  if (addBtn) {
+    addBtn.style.background = type === 'credit' ? 'var(--green)' : 'var(--accent)';
+    addBtn.style.boxShadow  = type === 'credit'
+      ? '0 2px 6px rgba(22,163,74,0.3)' : '0 2px 6px rgba(37,99,235,0.25)';
+  }
+}
+
 async function addExpense() {
   const date = document.getElementById('expDate').value;
   const cat  = document.getElementById('expCat').value;
+  const bank = document.getElementById('expBank').value;
   const amt  = parseFloat(document.getElementById('expAmt').value);
   const note = document.getElementById('expNote').value.trim();
+  const type = _txType;
 
-  if (!date) { showToast('Please select a date', 'error'); return; }
+  if (!date) { showToast('Please select a transaction date', 'error'); return; }
   if (!amt || amt <= 0) { showToast('Enter a valid amount', 'error'); return; }
 
-  const btn = document.querySelector('.btn[onclick="addExpense()"]');
+  const btn = document.getElementById('addTxBtn');
   if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
 
   try {
-    await saveExpenseToSheet({ id: Date.now(), date, cat, amt, note });
+    await saveExpenseToSheet({ id: Date.now(), date, cat, bank, amt, note, type });
     document.getElementById('expAmt').value = '';
     document.getElementById('expNote').value = '';
-    showToast('Expense added!');
+    showToast(type === 'credit' ? 'Credit recorded!' : 'Debit recorded!');
     await render();
   } catch(_) {
     // error already shown in saveExpenseToSheet
   } finally {
-    if (btn) { btn.disabled = false; btn.textContent = '+ Add Expense'; }
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = '+ Add Transaction';
+    }
   }
 }
 
@@ -1110,50 +1179,45 @@ async function render() {
 
 async function renderStats() {
   const expenses = await getExpenses();
-  const total = expenses.reduce((s, e) => s + e.amt, 0);
+  const debits  = expenses.filter(e => e.type !== 'credit');
+  const credits = expenses.filter(e => e.type === 'credit');
+  const totalDebit  = debits.reduce((s, e) => s + e.amt, 0);
+  const totalCredit = credits.reduce((s, e) => s + e.amt, 0);
+  const net = totalCredit - totalDebit;
   const count = expenses.length;
-  const topCat = (() => {
-    const m = {};
-    expenses.forEach(e => m[e.cat] = (m[e.cat]||0) + e.amt);
-    return Object.entries(m).sort((a,b)=>b[1]-a[1])[0]?.[0] || '—';
-  })();
-  const avgDay = (() => {
-    const days = new Set(expenses.map(e=>e.date)).size;
-    return days ? (total/days) : 0;
-  })();
 
   document.getElementById('statsGrid').innerHTML = `
     <div class="stat-card">
       <div class="sc-top">
-        <span class="label">Total Spent</span>
-        <div class="sc-icon" style="background:#fee2e2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <span class="label">Total Debit</span>
+        <div class="sc-icon" style="background:#fee2e2"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></div>
       </div>
-      <div class="value red">₹${fmt(total)}</div>
-      <div class="sc-delta">${count} transactions this month</div>
+      <div class="value red">₹${fmt(totalDebit)}</div>
+      <div class="sc-delta">${debits.length} debit entries</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-top">
+        <span class="label">Total Credit</span>
+        <div class="sc-icon" style="background:#dcfce7"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></div>
+      </div>
+      <div class="value green">₹${fmt(totalCredit)}</div>
+      <div class="sc-delta">${credits.length} credit entries</div>
+    </div>
+    <div class="stat-card">
+      <div class="sc-top">
+        <span class="label">Net Balance</span>
+        <div class="sc-icon" style="background:#dbeafe"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+      </div>
+      <div class="value ${net >= 0 ? 'green' : 'red'}">₹${fmt(Math.abs(net))}</div>
+      <div class="sc-delta">${net >= 0 ? 'surplus' : 'deficit'} this month</div>
     </div>
     <div class="stat-card">
       <div class="sc-top">
         <span class="label">Transactions</span>
-        <div class="sc-icon" style="background:#dbeafe"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
+        <div class="sc-icon" style="background:#fef3c7"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div>
       </div>
       <div class="value purple">${count}</div>
-      <div class="sc-delta">entries recorded</div>
-    </div>
-    <div class="stat-card">
-      <div class="sc-top">
-        <span class="label">Top Category</span>
-        <div class="sc-icon" style="background:#fef3c7"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-      </div>
-      <div class="value" style="font-size:1.2rem;letter-spacing:-0.3px">${topCat}</div>
-      <div class="sc-delta">highest spending</div>
-    </div>
-    <div class="stat-card">
-      <div class="sc-top">
-        <span class="label">Avg per Day</span>
-        <div class="sc-icon" style="background:#dcfce7"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-      </div>
-      <div class="value green">₹${fmt(avgDay)}</div>
-      <div class="sc-delta">daily average</div>
+      <div class="sc-delta">total entries this month</div>
     </div>
   `;
 }
@@ -1188,11 +1252,13 @@ async function renderCategoryBreakdown() {
 
 async function renderTransactions() {
   const filterCat = document.getElementById('filterCat').value;
-  const search = document.getElementById('filterSearch').value.toLowerCase();
+  const search    = document.getElementById('filterSearch').value.toLowerCase();
 
+  const filterType = document.getElementById('filterType').value;
   let expenses = await getExpenses();
-  if (filterCat) expenses = expenses.filter(e => e.cat === filterCat);
-  if (search)    expenses = expenses.filter(e => e.note.toLowerCase().includes(search) || e.cat.toLowerCase().includes(search));
+  if (filterType) expenses = expenses.filter(e => (e.type || 'debit') === filterType);
+  if (filterCat)  expenses = expenses.filter(e => e.cat === filterCat);
+  if (search)     expenses = expenses.filter(e => (e.note||'').toLowerCase().includes(search) || e.cat.toLowerCase().includes(search) || (e.bank||'').toLowerCase().includes(search));
 
   if (!expenses.length) {
     document.getElementById('txTable').innerHTML = `<div class="empty"><div class="empty-icon" style="font-size:0;line-height:0"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.3;margin-bottom:10px"><path d="M3 3h18v18H3z"/><path d="M9 9h6v6H9z"/></svg></div>No transactions found</div>`;
@@ -1204,6 +1270,8 @@ async function renderTransactions() {
       <thead>
         <tr>
           <th>Date</th>
+          <th>Type</th>
+          <th>Bank</th>
           <th>Category</th>
           <th>Note</th>
           <th>Amount</th>
@@ -1211,19 +1279,29 @@ async function renderTransactions() {
         </tr>
       </thead>
       <tbody>
-        ${expenses.map(e => `
+        ${expenses.map(e => {
+          const isCredit = e.type === 'credit';
+          return `
           <tr>
-            <td>${formatDate(e.date)}</td>
+            <td style="white-space:nowrap;font-family:'DM Mono',monospace;font-size:0.8rem">${formatDate(e.date)}</td>
             <td>
-              <span class="badge" style="background:${CAT_COLOR_MAP[e.cat]}22;color:${CAT_COLOR_MAP[e.cat]}">
+              <span class="badge ${isCredit ? 'badge-credit' : 'badge-debit'}">
+                ${isCredit ? 'Credit' : 'Debit'}
+              </span>
+            </td>
+            <td style="color:var(--muted);font-size:0.8rem">${e.bank || '—'}</td>
+            <td>
+              <span class="badge" style="background:${CAT_COLOR_MAP[e.cat]||'#eee'}22;color:${CAT_COLOR_MAP[e.cat]||'#888'}">
                 ${e.cat}
               </span>
             </td>
-            <td style="color:var(--muted)">${e.note || '—'}</td>
-            <td class="tx-amount">₹${fmt(e.amt)}</td>
-            <td><button class="del-btn" onclick="deleteExpense(${e.id})" title="Delete"></button></td>
-          </tr>
-        `).join('')}
+            <td style="color:var(--muted);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.note || '—'}</td>
+            <td class="tx-amount" style="color:${isCredit ? 'var(--green)' : 'var(--red)'}">
+              ${isCredit ? '+' : '-'}₹${fmt(e.amt)}
+            </td>
+            <td><button class="del-btn" onclick="deleteExpense(${e.id})" title="Delete">✕</button></td>
+          </tr>`;
+        }).join('')}
       </tbody>
     </table>
   `;
